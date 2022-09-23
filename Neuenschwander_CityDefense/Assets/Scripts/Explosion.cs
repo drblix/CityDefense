@@ -41,7 +41,7 @@ public class Explosion : MonoBehaviour
 
     public IEnumerator DestroyDelay()
     {
-        yield return new WaitForSeconds(0.417f);
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 }

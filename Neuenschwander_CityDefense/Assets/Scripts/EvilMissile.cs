@@ -1,20 +1,25 @@
 using UnityEngine;
 
-public class Missile : MonoBehaviour
+public class EvilMissile : MonoBehaviour
 {
     #region Variables
 
+    private Explosion explosion;
     private Transform targetBuilding;
     private float misSpeed = 0f;
 
     #endregion
 
+    private void Awake()
+    {
+        explosion = FindObjectOfType<Explosion>();
+    }
+
     private void Update()
     {
         if (targetBuilding != null && misSpeed != 0f)
         {
-            transform.rotation = Quaternion.LookRotation(targetBuilding.position, transform.up);
-            transform.position = Vector3.MoveTowards(transform.position, targetBuilding.position, misSpeed * Time.deltaTime);
+            transform.SetPositionAndRotation(Vector3.MoveTowards(transform.position, targetBuilding.position, misSpeed * Time.deltaTime), Quaternion.LookRotation(targetBuilding.position, transform.up));
         }
     }
 
@@ -28,7 +33,8 @@ public class Missile : MonoBehaviour
     {
         if (collision.collider.CompareTag("Building"))
         {
-
+            GetComponent<BoxCollider>().enabled = false;
+            explosion.CreateExplosion("good", transform.position);
             Destroy(transform.GetChild(0).gameObject);
         }
     }
