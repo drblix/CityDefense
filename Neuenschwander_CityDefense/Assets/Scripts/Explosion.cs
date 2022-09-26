@@ -5,43 +5,19 @@ public class Explosion : MonoBehaviour
 {
     [SerializeField]
     private GameObject explosion;
+    private Animator animator;
 
-    private string explosionType = "";
-
-    public void CreateExplosion(string type, Vector3 position)
+    private void Awake()
     {
-        GameObject newExp = Instantiate(explosion, position, Quaternion.identity);
-        StartCoroutine(newExp.GetComponent<Explosion>().DestroyDelay());
-        if (type == "good")
-        {
-            newExp.name = "GoodExplosion";
-            explosionType = type;
-        }
-        else if (type == "bad")
-        {
-            newExp.name = "BadExplosion";
-            explosionType = type;
-        }
-        else
-        {
-            newExp.name = "DummyExplosion";
-        }
+        animator = GetComponent<Animator>();
+        Destroy(gameObject, animator.GetCurrentAnimatorStateInfo(0).length);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Missile") && explosionType != "")
+        if (collision.collider.CompareTag("Missile"))
         {
-            if (explosionType == "good" && collision.collider.name.ToLower().Contains("evil"))
-            {
-                Destroy(collision.gameObject);
-            }
+            Destroy(collision.gameObject);
         }
-    }
-
-    public IEnumerator DestroyDelay()
-    {
-        yield return new WaitForSeconds(2f);
-        Destroy(gameObject);
     }
 }

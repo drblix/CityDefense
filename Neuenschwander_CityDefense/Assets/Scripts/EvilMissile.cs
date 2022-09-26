@@ -4,7 +4,7 @@ public class EvilMissile : MonoBehaviour
 {
     #region Variables
 
-    private Explosion explosion;
+    private ExplosionManager explosionMan;
     private Transform targetBuilding;
     private float misSpeed = 0f;
 
@@ -12,7 +12,7 @@ public class EvilMissile : MonoBehaviour
 
     private void Awake()
     {
-        explosion = FindObjectOfType<Explosion>();
+        explosionMan = FindObjectOfType<ExplosionManager>();
     }
 
     private void Update()
@@ -34,7 +34,7 @@ public class EvilMissile : MonoBehaviour
         if (collision.collider.CompareTag("Building"))
         {
             GetComponent<BoxCollider>().enabled = false;
-            explosion.CreateExplosion("good", transform.position);
+            explosionMan.CreateExplosion(transform.position);
             Destroy(transform.GetChild(0).gameObject);
         }
     }
