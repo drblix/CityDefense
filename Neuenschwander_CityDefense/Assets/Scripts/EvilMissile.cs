@@ -6,7 +6,9 @@ public class EvilMissile : MonoBehaviour
 
     private ExplosionManager explosionMan;
     private Transform targetBuilding;
+    
     private float misSpeed = 0f;
+    private bool isDead = false;
 
     #endregion
 
@@ -17,7 +19,7 @@ public class EvilMissile : MonoBehaviour
 
     private void Update()
     {
-        if (targetBuilding != null && misSpeed != 0f)
+        if (targetBuilding != null && misSpeed != 0f && !isDead)
         {
             transform.SetPositionAndRotation(Vector3.MoveTowards(transform.position, targetBuilding.position, misSpeed * Time.deltaTime), Quaternion.LookRotation(targetBuilding.position, transform.up));
         }
@@ -33,9 +35,15 @@ public class EvilMissile : MonoBehaviour
     {
         if (collision.collider.CompareTag("Building"))
         {
-            GetComponent<BoxCollider>().enabled = false;
-            explosionMan.CreateExplosion(transform.position);
-            Destroy(transform.GetChild(0).gameObject);
+            MissileDeath();
         }
+    }
+
+    public void MissileDeath()
+    {
+        isDead = true;
+        GetComponent<BoxCollider>().enabled = false;
+        explosionMan.CreateExplosion(transform.position);
+        Destroy(transform.GetChild(0).gameObject);
     }
 }

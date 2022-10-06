@@ -15,9 +15,19 @@ public class Explosion : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Missile"))
+        if (!collision.collider.name.Contains("Good"))
         {
-            Destroy(collision.gameObject);
+            print("tick");
+            if (collision.collider.CompareTag("Missile"))
+            {
+                EvilMissile evilMis = collision.collider.GetComponent<EvilMissile>();
+                evilMis.MissileDeath();
+            }
+            else if (collision.collider.CompareTag("UFO"))
+            {
+                UFOScript ufoS = collision.collider.GetComponent<UFOScript>();
+                ufoS.UFODeath();
+            }
         }
     }
 }

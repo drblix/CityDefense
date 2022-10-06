@@ -15,7 +15,7 @@ public class PlayerCursor : MonoBehaviour
     private InputAction horzAction;
 
     [SerializeField]
-    private float cursorSpeed = 5f;
+    private float cursorSpeed = 8f;
 
     private void Awake()
     {
