@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject explosion;
     private Animator animator;
 
     private void Awake()
@@ -15,9 +13,9 @@ public class Explosion : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        print(collision.collider.name);
         if (!collision.collider.name.Contains("Good"))
         {
-            print("tick");
             if (collision.collider.CompareTag("Missile"))
             {
                 EvilMissile evilMis = collision.collider.GetComponent<EvilMissile>();
@@ -26,7 +24,10 @@ public class Explosion : MonoBehaviour
             else if (collision.collider.CompareTag("UFO"))
             {
                 UFOScript ufoS = collision.collider.GetComponent<UFOScript>();
-                ufoS.UFODeath();
+                if (ufoS)
+                {
+                    ufoS.UFODeath();
+                }
             }
         }
     }

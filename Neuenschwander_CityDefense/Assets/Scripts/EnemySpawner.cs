@@ -6,6 +6,8 @@ public class EnemySpawner : MonoBehaviour
 {
     #region Variables
 
+    private RoundManager roundManager;
+
     [SerializeField]
     private GameObject missile;
     [SerializeField]
@@ -17,9 +19,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private Transform[] buildings;
 
-    private bool gameOver = false;
+    public bool gameOver = false;
 
-    private int missilesLeft = 8;
+    private int missilesLeft = 6;
     private int ufoLeft = 1;
 
     private float minWaitTime = 4f;
@@ -34,12 +36,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
+        roundManager = FindObjectOfType<RoundManager>();
         StartCoroutine(SpawnTask());
     }
 
     private IEnumerator SpawnTask()
     {
-        print("tick");
         for (int i = 0; i < missilesLeft; i++)
         {
             yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
@@ -49,7 +51,7 @@ public class EnemySpawner : MonoBehaviour
             Vector3 spawnPos;
             GameObject newEnemy;
 
-            if (Random.Range(0f, 1f) > 1.1f)
+            if (Random.Range(0f, 1f) > 1.1f || ufoLeft == 0)
             {
                 spawnPos = new(Random.Range(-xBound, xBound), yLoc, 70f);
                 newEnemy = Instantiate(missile, spawnPos, Quaternion.identity, missileContainer);
@@ -58,10 +60,13 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
+                ufoLeft--;
                 spawnPos = new(-100f, 152f, 72f);
                 Instantiate(ufo, spawnPos, Quaternion.identity);
             }
         }
+
+        roundManager.
     }
 
     public void SpawnMissile(Vector3 pos)

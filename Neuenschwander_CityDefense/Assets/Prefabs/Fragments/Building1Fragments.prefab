@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1956057334784635540}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Building1Fragments
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +32,7 @@ Transform:
   - {fileID: 418064532569973071}
   - {fileID: 5913347745100427473}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2356165441598044273
 GameObject:
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 7877575658015592411}
   - component: {fileID: 7877575658015592413}
   - component: {fileID: 7877575658015592410}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fragment2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 8
   m_CollisionDetection: 0
 --- !u!1 &4416718041002680402
 GameObject:
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 7909188145997047021}
   - component: {fileID: 7909188145997047023}
   - component: {fileID: 7909188145997047020}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fragment3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 8
   m_CollisionDetection: 0
 --- !u!1 &5374151261301305114
 GameObject:
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 7740669297755595003}
   - component: {fileID: 7740669297755595005}
   - component: {fileID: 7740669297755595002}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fragment1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,5 +377,5 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 8
   m_CollisionDetection: 0

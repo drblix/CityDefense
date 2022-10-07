@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +14,8 @@ public class PlayerCursor : MonoBehaviour
 
     [SerializeField]
     private float cursorSpeed = 8f;
+
+    private int missilesLeft = 10;
 
     private void Awake()
     {
@@ -48,5 +48,11 @@ public class PlayerCursor : MonoBehaviour
         Vector3 toPos = transform.position;
         toPos.z = 72f;
         goodMis.gotoPos = toPos;
+    }
+    
+    public void ResetPlayer(int numMis)
+    {
+        transform.position = new(0f, 20f, 65f);
+        missilesLeft = numMis;
     }
 }

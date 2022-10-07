@@ -13,6 +13,7 @@ public class UFOScript : MonoBehaviour
 
     private void Awake()
     {
+        explosMan = FindObjectOfType<ExplosionManager>();
         spawner = FindObjectOfType<EnemySpawner>();
         missilesLeft = Random.Range(2, 5);
         StartCoroutine(ShootMissile());
@@ -36,7 +37,6 @@ public class UFOScript : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(3f, 6f));
         }
     }
-
 
     public void UFODeath()
     {

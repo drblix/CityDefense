@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1143268310176820378}
   - component: {fileID: 1143268310176820379}
   - component: {fileID: -3930261263974775800}
+  - component: {fileID: 8349102573554511215}
   m_Layer: 0
   m_Name: EvilUFO
   m_TagString: UFO
@@ -208,6 +209,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28072845f7a52474fba3fb87f01fd037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &8349102573554511215
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503437052788821312}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &4536704715138880257
 GameObject:
   m_ObjectHideFlags: 0
