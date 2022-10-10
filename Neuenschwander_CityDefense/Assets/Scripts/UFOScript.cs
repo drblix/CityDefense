@@ -33,7 +33,7 @@ public class UFOScript : MonoBehaviour
     {
         for (int i = 0; i < missilesLeft; i++)
         {
-            spawner.SpawnMissile(transform.GetChild(0).position);
+            spawner.SpawnMissile(transform.GetChild(0).position, 17.5f, "UFOMissile");
             yield return new WaitForSeconds(Random.Range(3f, 6f));
         }
     }

@@ -11,8 +11,6 @@ public class RoundManager : MonoBehaviour
     [SerializeField]
     private GameObject[] buildingDebris;
 
-    private bool inRound = true;
-
     private int currentRound = 1;
     private int buildingsRemaining = 3;
 
@@ -20,7 +18,6 @@ public class RoundManager : MonoBehaviour
     {
         enemSpawner = FindObjectOfType<EnemySpawner>();
         pCursor = FindObjectOfType<PlayerCursor>();
-        BuildingHit(1);
     }
 
     public IEnumerator OutOfMissiles()
@@ -30,7 +27,6 @@ public class RoundManager : MonoBehaviour
             yield return null;
         }
 
-        inRound = false;
         yield return new WaitForSeconds(2f);
         LoadNextRound();
     }
@@ -40,12 +36,14 @@ public class RoundManager : MonoBehaviour
         currentRound++;
         enemSpawner.SetDataAndStart(6 + (currentRound * 2), (int)(1 + ((currentRound / 2) * 1.2f)));
         pCursor.ResetPlayer(10 + (currentRound * 2));
-        inRound = true;
     }
 
     public void GameOver()
     {
-
+        foreach (EvilMissile mis in FindObjectsOfType<EvilMissile>())
+        {
+            Destroy(mis.gameObject);
+        }
     }
 
     public void BuildingHit(int num)
@@ -58,7 +56,7 @@ public class RoundManager : MonoBehaviour
 
         foreach (Transform child in bldingFrag.transform)
         {
-            child.GetComponent<Rigidbody>().AddExplosionForce(1500f, bldingFrag.transform.position, 20f);
+            child.GetComponent<Rigidbody>().AddExplosionForce(1000f, bldingFrag.transform.position, 20f);
         }
 
         buildingsRemaining--;

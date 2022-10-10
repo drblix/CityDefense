@@ -17,17 +17,15 @@ public class EnemySpawner : MonoBehaviour
     private Transform missileContainer;
 
     [SerializeField]
-    private Transform[] buildings;
+    private Transform[] buildings = new Transform[3];
 
     public bool gameOver = false;
 
     private int missilesLeft = 6;
     private int ufoLeft = 1;
 
-    private float minWaitTime = 4f;
-    private float maxWaitTime = 9f;
-
-    private float missileSpeed = 25f;
+    private const float MIN_WAIT_TIME = 4f;
+    private const float MAX_WAIT_TIME = 9f;
 
     private const float xBound = 84f;
     private const float yLoc = 187f;
@@ -44,19 +42,16 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < missilesLeft; i++)
         {
-            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
+            yield return new WaitForSeconds(Random.Range(MIN_WAIT_TIME, MAX_WAIT_TIME));
 
             if (gameOver) { break; }
 
             Vector3 spawnPos;
-            GameObject newEnemy;
 
             if (Random.Range(0f, 1f) > 1.1f || ufoLeft == 0)
             {
                 spawnPos = new(Random.Range(-xBound, xBound), yLoc, 70f);
-                newEnemy = Instantiate(missile, spawnPos, Quaternion.identity, missileContainer);
-                newEnemy.transform.GetComponent<EvilMissile>().SetSettings(buildings[Random.Range(0, buildings.Length)], missileSpeed);
-                newEnemy.name = "Missile" + (i + 1);
+                SpawnMissile(spawnPos, 25f, "Missile" + (i + 1));
             }
             else
             {
@@ -66,14 +61,14 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        roundManager.
+        StartCoroutine(roundManager.OutOfMissiles());
     }
 
-    public void SpawnMissile(Vector3 pos)
+    public void SpawnMissile(Vector3 pos, float speed, string name)
     {
         GameObject newMis = Instantiate(missile, pos, Quaternion.identity, missileContainer);
-        newMis.transform.GetComponent<EvilMissile>().SetSettings(buildings[Random.Range(0, buildings.Length)], missileSpeed);
-        newMis.name = "UFOMissile";
+        newMis.transform.GetComponent<EvilMissile>().SetSettings(buildings[Random.Range(0, buildings.Length)], speed);
+        newMis.name = name;
     }
 
     public void SetDataAndStart(int numMis, int numUfo)
