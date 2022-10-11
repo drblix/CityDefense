@@ -12,12 +12,13 @@ public class EnemySpawner : MonoBehaviour
     private GameObject missile;
     [SerializeField]
     private GameObject ufo;
+    [SerializeField]
+    private GameObject warningSymb;
 
     [SerializeField]
     private Transform missileContainer;
 
-    [SerializeField]
-    private Transform[] buildings = new Transform[3];
+    public List<Transform> bldings = new(3);
 
     public bool gameOver = false;
 
@@ -35,7 +36,6 @@ public class EnemySpawner : MonoBehaviour
     private void Awake()
     {
         roundManager = FindObjectOfType<RoundManager>();
-        StartCoroutine(SpawnTask());
     }
 
     private IEnumerator SpawnTask()
@@ -48,16 +48,21 @@ public class EnemySpawner : MonoBehaviour
 
             Vector3 spawnPos;
 
-            if (Random.Range(0f, 1f) > 1.1f || ufoLeft == 0)
+            if (Random.Range(0f, 1f) > 0.2f || ufoLeft == 0)
             {
                 spawnPos = new(Random.Range(-xBound, xBound), yLoc, 70f);
                 SpawnMissile(spawnPos, 25f, "Missile" + (i + 1));
             }
-            else
+            else if (FindObjectsOfType<UFOScript>().Length == 0)
             {
                 ufoLeft--;
                 spawnPos = new(-100f, 152f, 72f);
                 Instantiate(ufo, spawnPos, Quaternion.identity);
+            }
+            else
+            {
+                spawnPos = new(Random.Range(-xBound, xBound), yLoc, 70f);
+                SpawnMissile(spawnPos, 25f, "Missile" + (i + 1));
             }
         }
 
@@ -67,7 +72,10 @@ public class EnemySpawner : MonoBehaviour
     public void SpawnMissile(Vector3 pos, float speed, string name)
     {
         GameObject newMis = Instantiate(missile, pos, Quaternion.identity, missileContainer);
-        newMis.transform.GetComponent<EvilMissile>().SetSettings(buildings[Random.Range(0, buildings.Length)], speed);
+
+        Transform bldingTarget = bldings[Random.Range(0, bldings.Count)];
+
+        newMis.transform.GetComponent<EvilMissile>().SetSettings(bldingTarget, speed);
         newMis.name = name;
     }
 
@@ -76,5 +84,15 @@ public class EnemySpawner : MonoBehaviour
         missilesLeft = numMis;
         ufoLeft = numUfo;
         StartCoroutine(SpawnTask());
+    }
+
+    public Transform GetNewTarget()
+    {
+        return bldings[Random.Range(0, bldings.Count)];
+    }
+
+    public GameObject CreateWarningObj()
+    {
+        return Instantiate(warningSymb);
     }
 }

@@ -255,8 +255,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 204.7, y: 130.8}
-  m_SizeDelta: {x: 92.053, y: 15.6533}
+  m_AnchoredPosition: {x: 334.2, y: 206.1}
+  m_SizeDelta: {x: 113.3997, y: 20.0628}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &411565796
 MonoBehaviour:
@@ -287,8 +287,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4294930541
+  m_fontColor: {r: 0.42745098, g: 0.4392157, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -841,6 +841,8 @@ MonoBehaviour:
   - {fileID: 1956057334784635541, guid: edc56ba1b9977e34282fafdd060241e2, type: 3}
   - {fileID: 3640940877340694502, guid: c643b39f193fa7846853dc387d56f9ea, type: 3}
   - {fileID: 2185760663687711285, guid: 9466afb0eec49344aa345f77891c2f8c, type: 3}
+  levelDisplay: {fileID: 411565796}
+  missileDisplay: {fileID: 1091051490}
 --- !u!4 &1009535351
 Transform:
   m_ObjectHideFlags: 0
@@ -952,8 +954,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missile: {fileID: 5543079937163911718, guid: 0dfe2b05d51c9134396d30ba97ec9a1e, type: 3}
   ufo: {fileID: 1503437052788821312, guid: 7143f619de56eb3469c0f8b078949da9, type: 3}
+  warningSymb: {fileID: 6169240990057220117, guid: 8379ef1c989efbc4099e46bca2786307, type: 3}
   missileContainer: {fileID: 643645501}
-  buildings:
+  bldings:
   - {fileID: 543450651949222261}
   - {fileID: 5656851178154681537}
   - {fileID: 47997071091311158}
@@ -993,8 +996,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 203.72002, y: 114.65868}
-  m_SizeDelta: {x: 90.0904, y: 16.6346}
+  m_AnchoredPosition: {x: 330.73, y: 185.06}
+  m_SizeDelta: {x: 106.4622, y: 22.0216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1091051490
 MonoBehaviour:
@@ -1025,8 +1028,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4294930541
+  m_fontColor: {r: 0.4292453, g: 0.43888998, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1545,7 +1548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}

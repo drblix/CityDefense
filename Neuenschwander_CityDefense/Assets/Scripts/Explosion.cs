@@ -13,7 +13,6 @@ public class Explosion : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print(collision.collider.name);
         if (!collision.collider.name.Contains("Good"))
         {
             if (collision.collider.CompareTag("Missile"))

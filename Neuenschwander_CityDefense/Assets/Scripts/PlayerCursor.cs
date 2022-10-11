@@ -39,6 +39,8 @@ public class PlayerCursor : MonoBehaviour
         float newX = Mathf.Clamp(transform.position.x, -84f, 84f);
         float newY = Mathf.Clamp(transform.position.y, 8f, 162f);
         transform.position = new(newX, newY, 65f);
+
+        if (Keyboard.current.escapeKey.wasPressedThisFrame) { Application.Quit(); }
     }
     private void PlayerFired(InputAction.CallbackContext _)
     {

@@ -5,9 +5,12 @@ public class EvilMissile : MonoBehaviour
     #region Variables
 
     private RoundManager roundManager;
+    private EnemySpawner enemSpawner;
     private ExplosionManager explosionMan;
     private Transform targetBuilding;
-    
+
+    private GameObject warningObj;
+
     private float misSpeed = 0f;
     private bool isDead = false;
 
@@ -15,8 +18,10 @@ public class EvilMissile : MonoBehaviour
 
     private void Awake()
     {
+        enemSpawner = FindObjectOfType<EnemySpawner>();
         roundManager = FindObjectOfType<RoundManager>();
         explosionMan = FindObjectOfType<ExplosionManager>();
+        warningObj = enemSpawner.CreateWarningObj();
     }
 
     private void Update()
@@ -24,6 +29,21 @@ public class EvilMissile : MonoBehaviour
         if (targetBuilding != null && misSpeed != 0f && !isDead)
         {
             transform.SetPositionAndRotation(Vector3.MoveTowards(transform.position, targetBuilding.position, misSpeed * Time.deltaTime), Quaternion.LookRotation(targetBuilding.position, transform.up));
+        }
+        else if (targetBuilding == null)
+        {
+            targetBuilding = enemSpawner.GetNewTarget();
+        }
+
+        if (transform.position.y > 174f)
+        {
+            Debug.Log("place exclamation point");
+            Vector3 pos = new(transform.position.x, 163f, transform.position.z);
+            warningObj.transform.position = pos;
+        }
+        else if (warningObj)
+        {
+            Destroy(warningObj);
         }
     }
 

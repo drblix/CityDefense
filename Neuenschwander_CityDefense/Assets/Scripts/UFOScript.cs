@@ -8,20 +8,21 @@ public class UFOScript : MonoBehaviour
 
     private Vector3 goal = new(100f, 152f, 72f);
 
-    private float ufoSpeed = 20f;
+    private const float UFO_SPEED = 20f;
     private int missilesLeft;
 
     private void Awake()
     {
         explosMan = FindObjectOfType<ExplosionManager>();
         spawner = FindObjectOfType<EnemySpawner>();
+
         missilesLeft = Random.Range(2, 5);
         StartCoroutine(ShootMissile());
     }
 
     private void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, goal, Time.deltaTime * ufoSpeed);
+        transform.position = Vector3.MoveTowards(transform.position, goal, Time.deltaTime * UFO_SPEED);
 
         if (transform.position.x >= goal.x)
         {
@@ -34,7 +35,7 @@ public class UFOScript : MonoBehaviour
         for (int i = 0; i < missilesLeft; i++)
         {
             spawner.SpawnMissile(transform.GetChild(0).position, 17.5f, "UFOMissile");
-            yield return new WaitForSeconds(Random.Range(3f, 6f));
+            yield return new WaitForSeconds(Random.Range(2f, 5f));
         }
     }
 
