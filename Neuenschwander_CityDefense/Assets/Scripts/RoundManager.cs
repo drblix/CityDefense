@@ -17,7 +17,7 @@ public class RoundManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI missileDisplay;
 
-    private int currentRound = 1;
+    public int currentRound = 1;
     private int buildingsRemaining = 3;
 
     private void Awake()
@@ -32,18 +32,12 @@ public class RoundManager : MonoBehaviour
 
     public IEnumerator OutOfMissiles()
     {
-        Debug.Log("waiting");
         while (FindObjectsOfType<EvilMissile>().Length > 0)
         {
-            foreach (EvilMissile mis in FindObjectsOfType<EvilMissile>())
-            {
-                Debug.Log(mis.gameObject.name);
-            }
             yield return null;
         }
 
         yield return new WaitForSeconds(2f);
-        Debug.Log("next round");
         LoadNextRound();
     }
 
@@ -54,6 +48,7 @@ public class RoundManager : MonoBehaviour
         enemSpawner.SetDataAndStart(7 + (currentRound * 2), (int)(1 + ((currentRound / 2) * 1.2f)));
         pCursor.ResetPlayer(numMis);
         missileDisplay.SetText("Missiles Left: " + numMis.ToString());
+        levelDisplay.SetText("Level: " + currentRound.ToString());
     }
 
     public void GameOver()

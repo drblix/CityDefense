@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -25,11 +26,11 @@ public class EnemySpawner : MonoBehaviour
     private int missilesLeft = 6;
     private int ufoLeft = 1;
 
-    private const float MIN_WAIT_TIME = 4f;
-    private const float MAX_WAIT_TIME = 9f;
+    private float minWaitTime = 4f;
+    private float maxWaitTime = 9f;
 
     private const float xBound = 84f;
-    private const float yLoc = 187f;
+    private const float yLoc = 200f;
 
     #endregion
 
@@ -40,9 +41,18 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnTask()
     {
+        if (roundManager.currentRound != 1)
+        {
+            float modi = Random.Range(0.2f, 0.6f);
+            minWaitTime -= modi;
+            maxWaitTime -= modi;
+            minWaitTime = Mathf.Clamp(minWaitTime, 0f, 4f);
+            maxWaitTime = Mathf.Clamp(maxWaitTime, 2f, 9f);
+        }
+
         for (int i = 0; i < missilesLeft; i++)
         {
-            yield return new WaitForSeconds(Random.Range(MIN_WAIT_TIME, MAX_WAIT_TIME));
+            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
 
             if (gameOver) { break; }
 
@@ -88,7 +98,10 @@ public class EnemySpawner : MonoBehaviour
 
     public Transform GetNewTarget()
     {
-        return bldings[Random.Range(0, bldings.Count)];
+        Transform blding = bldings[Random.Range(0, bldings.Count)];
+        
+        if (blding) { return blding; }
+        else { return null; }
     }
 
     public GameObject CreateWarningObj()
