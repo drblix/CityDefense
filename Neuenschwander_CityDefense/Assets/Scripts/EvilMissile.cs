@@ -2,6 +2,9 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Container for all enemy missile functions and behaviors
+/// </summary>
 public class EvilMissile : MonoBehaviour
 {
     #region Variables
@@ -16,6 +19,8 @@ public class EvilMissile : MonoBehaviour
     private float misSpeed = 0f;
     private bool isDead = false;
 
+    private bool canHaveTypes = false;
+
     // Missile types
     private bool isSplitter = false;
     private bool isSpeedy = false;
@@ -29,46 +34,13 @@ public class EvilMissile : MonoBehaviour
         explosionMan = FindObjectOfType<ExplosionManager>();
 
         warningObj = enemSpawner.CreateWarningObj();
-
-        isSplitter = Random.Range(0f, 1f) < 0.1f;
-        isSpeedy = Random.Range(0f, 1f) < 1f;
-
-        if (isSplitter && !isSpeedy)
-        {
-            transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.yellow);
-            warningObj.GetComponent<TextMeshPro>().color = Color.yellow;
-
-            TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
-            trailRenderer.material.SetColor("_Color", Color.yellow);
-            trailRenderer.endColor = Color.yellow;
-            trailRenderer.startColor = Color.yellow;
-
-            misSpeed = 10f;
-
-            StartCoroutine(SplitterSequence());
-        }
-        else if (isSpeedy && !isSplitter)
-        {
-            transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
-            warningObj.GetComponent<TextMeshPro>().color = Color.green;
-
-            TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
-            trailRenderer.material.SetColor("_Color", Color.green);
-            trailRenderer.endColor = Color.yellow;
-            trailRenderer.startColor = Color.yellow;
-
-            transform.position = new(transform.position.x, transform.position.y + 50f, transform.position.z);
-
-            misSpeed = 50f;
-        }
     }
 
     private void Update()
     {
         if (targetBuilding != null && misSpeed != 0f && !isDead)
         {
-            print(misSpeed);
-            transform.SetPositionAndRotation(Vector3.MoveTowards(transform.position, targetBuilding.position, misSpeed * Time.deltaTime), Quaternion.LookRotation(targetBuilding.position, transform.up));
+             transform.SetPositionAndRotation(Vector3.MoveTowards(transform.position, targetBuilding.position, misSpeed * Time.deltaTime), Quaternion.LookRotation(targetBuilding.position, transform.up));
         }
         else if (targetBuilding == null && !isDead && !enemSpawner.gameOver)
         {
@@ -86,30 +58,68 @@ public class EvilMissile : MonoBehaviour
         }
     }
 
-    public void SetSettings(Transform trans, float spd)
+    public void SetSettings(Transform trans, float spd, bool haveTypes)
     {
         targetBuilding = trans;
-
-        if (!isSpeedy)
+        canHaveTypes = haveTypes;
+        misSpeed = spd;
+        
+        if (canHaveTypes)
         {
-            misSpeed = spd;
+            DetermineType();
+        }
+
+        if (isSplitter)
+        {
+            transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.yellow);
+            warningObj.GetComponent<TextMeshPro>().color = Color.yellow;
+
+            TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
+            trailRenderer.material.SetColor("_Color", Color.yellow);
+            trailRenderer.endColor = Color.yellow;
+            trailRenderer.startColor = Color.yellow;
+
+            misSpeed = 14f;
+
+            transform.name = "SplitterMissile";
+            StartCoroutine(SplitterSequence());
+        }
+        else if (isSpeedy)
+        {
+            transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
+            warningObj.GetComponent<TextMeshPro>().color = Color.green;
+
+            TrailRenderer trailRenderer = GetComponent<TrailRenderer>();
+            trailRenderer.material.SetColor("_Color", Color.green);
+            trailRenderer.endColor = Color.yellow;
+            trailRenderer.startColor = Color.yellow;
+
+            transform.position = new(transform.position.x, transform.position.y + 50f, transform.position.z);
+
+            misSpeed = 50f;
+
+            transform.name = "SpeedMissile";
         }
     }
 
 
-    public void MissileDeath()
+    public void MissileDeath(bool explos)
     {
         isDead = true;
         GetComponent<BoxCollider>().enabled = false;
-        GameObject exp = explosionMan.CreateExplosion(transform.position);
 
-        if (isSplitter && !isSpeedy)
+        if (explos)
         {
-            exp.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.yellow);
-        }
-        else if (isSpeedy && !isSplitter)
-        {
-            exp.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
+            GameObject exp = explosionMan.CreateExplosion(transform.position);
+
+            if (isSplitter)
+            {
+                exp.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.yellow);
+            }
+            else if (isSpeedy)
+            {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                exp.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
+            }
         }
 
         Destroy(transform.GetChild(0).gameObject);
@@ -119,19 +129,41 @@ public class EvilMissile : MonoBehaviour
     private IEnumerator SplitterSequence()
     {
         yield return new WaitForSeconds(Random.Range(3f, 5f));
-        for (int i = 0; i < Random.Range(1, 3); i++)
+
+        for (int i = 0; i < Random.Range(2, 4); i++)
         {
-            enemSpawner.SpawnMissile(transform.position, 15f, "SplitMissile");
+            enemSpawner.SpawnMissile(transform.position, 15f, "SplitMissile", false);
         }
 
-        Destroy(gameObject);
+        MissileDeath(false);
+    }
+
+    private void DetermineType()
+    {
+        float chance = 0.1f + (roundManager.currentRound / 40f);
+        chance = Mathf.Clamp(chance, 0f, 0.6f);
+        if (Random.Range(0f, 1f) < chance && roundManager.currentRound != 1)
+        {
+            int num = Random.Range(1, 3);
+
+            switch (num)
+            {
+                case 1:
+                    isSplitter = true;
+                    break;
+                case 2:
+                    isSpeedy = true;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Building"))
         {
-            MissileDeath();
 
             int num;
             if (int.TryParse(collision.collider.name[8..], out int result))
@@ -145,6 +177,7 @@ public class EvilMissile : MonoBehaviour
             }
 
             roundManager.BuildingHit(num);
+            MissileDeath(true);
         }
     }
 }

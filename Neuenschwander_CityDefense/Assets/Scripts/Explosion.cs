@@ -18,7 +18,10 @@ public class Explosion : MonoBehaviour
             if (collision.collider.CompareTag("Missile"))
             {
                 EvilMissile evilMis = collision.collider.GetComponent<EvilMissile>();
-                evilMis.MissileDeath();
+                if (evilMis)
+                {
+                    evilMis.MissileDeath(true);
+                }
             }
             else if (collision.collider.CompareTag("UFO"))
             {

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -19,9 +18,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private Transform missileContainer;
 
+    [HideInInspector]
     public List<Transform> bldings = new(3);
 
-    public bool gameOver = false;
+    [HideInInspector]
+    public bool gameOver = true;
 
     private int missilesLeft = 6;
     private int ufoLeft = 1;
@@ -41,6 +42,8 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnTask()
     {
+        while (!roundManager) { yield return null; }
+
         if (roundManager.currentRound != 1)
         {
             float modi = Random.Range(0.2f, 0.6f);
@@ -61,7 +64,7 @@ public class EnemySpawner : MonoBehaviour
             if (Random.Range(0f, 1f) > 0.2f || ufoLeft == 0)
             {
                 spawnPos = new(Random.Range(-xBound, xBound), yLoc, 70f);
-                SpawnMissile(spawnPos, 25f, "Missile" + (i + 1));
+                SpawnMissile(spawnPos, 25f, "Missile" + (i + 1), true);
             }
             else if (FindObjectsOfType<UFOScript>().Length == 0)
             {
@@ -72,20 +75,23 @@ public class EnemySpawner : MonoBehaviour
             else
             {
                 spawnPos = new(Random.Range(-xBound, xBound), yLoc, 70f);
-                SpawnMissile(spawnPos, 25f, "Missile" + (i + 1));
+                SpawnMissile(spawnPos, 25f, "Missile" + (i + 1), true);
             }
         }
 
-        StartCoroutine(roundManager.OutOfMissiles());
+        if (!gameOver)
+        {
+            StartCoroutine(roundManager.OutOfMissiles());
+        }
     }
 
-    public void SpawnMissile(Vector3 pos, float speed, string name)
+    public void SpawnMissile(Vector3 pos, float speed, string name, bool haveTypes)
     {
         GameObject newMis = Instantiate(missile, pos, Quaternion.identity, missileContainer);
 
         Transform bldingTarget = bldings[Random.Range(0, bldings.Count)];
 
-        newMis.transform.GetComponent<EvilMissile>().SetSettings(bldingTarget, speed);
+        newMis.transform.GetComponent<EvilMissile>().SetSettings(bldingTarget, speed, haveTypes);
         newMis.name = name;
     }
 
@@ -106,6 +112,6 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject CreateWarningObj()
     {
-        return Instantiate(warningSymb);
+        return Instantiate(warningSymb, missileContainer);
     }
 }

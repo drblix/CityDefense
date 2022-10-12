@@ -16,7 +16,7 @@ public class UFOScript : MonoBehaviour
         explosMan = FindObjectOfType<ExplosionManager>();
         spawner = FindObjectOfType<EnemySpawner>();
 
-        missilesLeft = Random.Range(2, 5);
+        missilesLeft = Random.Range(2, 4);
         StartCoroutine(ShootMissile());
     }
 
@@ -34,8 +34,8 @@ public class UFOScript : MonoBehaviour
     {
         for (int i = 0; i < missilesLeft; i++)
         {
-            spawner.SpawnMissile(transform.GetChild(0).position, 17.5f, "UFOMissile");
-            yield return new WaitForSeconds(Random.Range(2f, 5f));
+            yield return new WaitForSeconds(Random.Range(2f, 4f));
+            spawner.SpawnMissile(transform.GetChild(0).position, 17.5f, "UFOMissile", false);
         }
     }
 

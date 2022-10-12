@@ -1,10 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerCursor : MonoBehaviour
 {
+    private RoundManager roundManager;
+
     [SerializeField]
     private GameObject goodMissile;
+
     private AudioSource audioSource;
 
     private PlayerInput plrInput;
@@ -13,12 +17,20 @@ public class PlayerCursor : MonoBehaviour
     private InputAction horzAction;
 
     [SerializeField]
+    private TextMeshProUGUI missileText;
+
+    [SerializeField]
     private float cursorSpeed = 8f;
 
     private int missilesLeft = 10;
 
+    [HideInInspector]
+    public bool gameOver = true;
+
     private void Awake()
     {
+        roundManager = FindObjectOfType<RoundManager>();
+
         plrInput = GetComponent<PlayerInput>();
         audioSource = GetComponent<AudioSource>();
 
@@ -44,17 +56,25 @@ public class PlayerCursor : MonoBehaviour
     }
     private void PlayerFired(InputAction.CallbackContext _)
     {
+        if (missilesLeft <= 0) { return; }
+
+        if (gameOver) { roundManager.ResetEverything(); return; }
+
         audioSource.Play();
         GameObject misObj = Instantiate(goodMissile, new Vector3(0.5f, 0.6f, 72f), Quaternion.identity);
         GoodMissile goodMis = misObj.GetComponent<GoodMissile>();
         Vector3 toPos = transform.position;
         toPos.z = 72f;
         goodMis.gotoPos = toPos;
+        missilesLeft--;
+        missileText.SetText("Missiles \nLeft: " + missilesLeft);
     }
     
     public void ResetPlayer(int numMis)
     {
         transform.position = new(0f, 20f, 65f);
+
+        numMis = Mathf.Clamp(numMis, 10, 99);
         missilesLeft = numMis;
     }
 }
