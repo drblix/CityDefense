@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
+    private RoundManager roundManager;
     private Animator animator;
 
     private void Awake()
     {
+        roundManager = FindObjectOfType<RoundManager>();
         animator = GetComponent<Animator>();
         Destroy(gameObject, animator.GetCurrentAnimatorStateInfo(0).length);
     }
@@ -22,6 +24,7 @@ public class Explosion : MonoBehaviour
                 {
                     evilMis.MissileDeath(true);
                 }
+                roundManager.ChangeScore(100);
             }
             else if (collision.collider.CompareTag("UFO"))
             {
@@ -30,6 +33,7 @@ public class Explosion : MonoBehaviour
                 {
                     ufoS.UFODeath();
                 }
+                roundManager.ChangeScore(250);
             }
         }
     }

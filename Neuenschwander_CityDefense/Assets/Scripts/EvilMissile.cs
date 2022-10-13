@@ -13,6 +13,7 @@ public class EvilMissile : MonoBehaviour
     private EnemySpawner enemSpawner;
     private ExplosionManager explosionMan;
 
+    [SerializeField]
     private Transform targetBuilding;
     private GameObject warningObj;
 
@@ -166,7 +167,8 @@ public class EvilMissile : MonoBehaviour
         {
 
             int num;
-            if (int.TryParse(collision.collider.name[8..], out int result))
+            string c = collision.collider.name[8].ToString();
+            if (int.TryParse(c, out int result))
             {
                 num = result;
             }

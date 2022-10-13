@@ -4,6 +4,8 @@ using TMPro;
 
 public class RoundManager : MonoBehaviour
 {
+    private const float EXPLOSION_FORCE = 1750f;
+
     private PlayerCursor pCursor;
     private EnemySpawner enemSpawner;
 
@@ -29,6 +31,8 @@ public class RoundManager : MonoBehaviour
     private TextMeshProUGUI scoreDisplay;
     [SerializeField]
     private TextMeshProUGUI gameOverTxt;
+    [SerializeField]
+    private TextMeshProUGUI highScoreTxt;
 
     public int currentRound = 1;
     private int buildingsRemaining = 3;
@@ -42,7 +46,10 @@ public class RoundManager : MonoBehaviour
         pCursor = FindObjectOfType<PlayerCursor>();
 
         misContainer = GameObject.Find("MissileContainer").transform;
-        debrisContainer = GameObject.Find("DebrisContainer").transform;   
+        debrisContainer = GameObject.Find("DebrisContainer").transform;
+
+        highScore = PrefSaving.GetData();
+        highScoreTxt.SetText("Highscore: " + highScore);
     }
 
     public IEnumerator OutOfMissiles()
@@ -61,7 +68,9 @@ public class RoundManager : MonoBehaviour
     {
         currentRound++;
         int numMis = 10 + (currentRound * 3);
-        enemSpawner.SetDataAndStart(7 + (currentRound * 2), (int)(1 + ((currentRound / 2) * 1.2f)));
+
+        // other formula: 7 + (currentRound * 2)
+        enemSpawner.SetDataAndStart(numMis - 5, (int)(1 + ((currentRound / 2) * 1.2f)));
         pCursor.ResetPlayer(numMis);
         missileDisplay.SetText("Missiles \nLeft: " + numMis.ToString());
         levelDisplay.SetText("Level: " + currentRound.ToString());
@@ -84,6 +93,10 @@ public class RoundManager : MonoBehaviour
         gameOverTxt.gameObject.SetActive(true);
 
         highScore = score > highScore ? score : highScore;
+        highScoreTxt.SetText("Highscore: " + highScore);
+        score = 0;
+        scoreDisplay.SetText(score.ToString());
+        PrefSaving.SaveData(highScore);
     }
 
     public void ResetEverything()
@@ -113,6 +126,7 @@ public class RoundManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        buildingsRemaining = 3;
         enemSpawner.SetDataAndStart(6, 1);
         pCursor.ResetPlayer(10);
         levelDisplay.SetText("Level: " + currentRound.ToString());
@@ -128,12 +142,12 @@ public class RoundManager : MonoBehaviour
         GameObject blding = buildings[num];
         if (!blding) { return; }
         GameObject bldingFrag = Instantiate(buildingDebris[num], blding.transform.position, Quaternion.identity, debrisContainer);
-        enemSpawner.bldings.Remove(blding.transform);
         Destroy(blding);
+        enemSpawner.bldings.Remove(blding.transform);
 
         foreach (Transform child in bldingFrag.transform)
         {
-            child.GetComponent<Rigidbody>().AddExplosionForce(1000f, bldingFrag.transform.position, 20f);
+            child.GetComponent<Rigidbody>().AddExplosionForce(EXPLOSION_FORCE, bldingFrag.transform.position, 20f);
         }
 
         buildingsRemaining--;
@@ -141,5 +155,11 @@ public class RoundManager : MonoBehaviour
         {
             GameOver();
         }
+    }
+
+    public void ChangeScore(int incr)
+    {
+        score += incr;
+        scoreDisplay.SetText(score.ToString());
     }
 }
